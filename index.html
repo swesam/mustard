@@ -77,8 +77,8 @@
         }
 
         .dj-image {
-            width: min(70vw, 70vh, 500px);
-            height: min(70vw, 70vh, 500px);
+            width: min(75vw, 75vh, 600px);
+            height: min(75vw, 75vh, 600px);
             margin: 0 auto 1.5rem;
             border-radius: 0;
             overflow: hidden;
@@ -96,16 +96,25 @@
             left: 0;
         }
 
-        .dj-image img.mouth-open {
-            opacity: 0;
+        /* Jaw overlay - uses cropped chin/mouth image for movement */
+        .jaw-overlay {
+            position: absolute;
+            top: 38.5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16%;
+            z-index: 5;
+            transition: transform 0.05s ease;
         }
 
-        .dj-image.talking img.mouth-closed {
-            opacity: 0;
+        .jaw-overlay img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
-        .dj-image.talking img.mouth-open {
-            opacity: 1;
+        .dj-image.talking .jaw-overlay {
+            transform: translateX(-50%) translateY(8px);
         }
 
         .buttons-container {
@@ -293,8 +302,10 @@
         <p class="subtitle">the ultimate audio illusion</p>
 
         <div class="dj-image" id="dj-image">
-            <img src="mustard-cutout.png" alt="DJ Mustard" class="mouth-closed">
-            <img src="mustard-open-cutout.png" alt="DJ Mustard talking" class="mouth-open">
+            <img src="mustard-cutout.png" alt="DJ Mustard">
+            <div class="jaw-overlay">
+                <img src="chin.png" alt="">
+            </div>
         </div>
 
         <div class="buttons-container">
@@ -335,27 +346,10 @@
 
         let talkingInterval = null;
 
-        // Start talking animation when audio plays - rapidly toggle mouth open/closed
-        beatAudio.addEventListener('play', () => {
-            talkingInterval = setInterval(() => {
-                djImage.classList.toggle('talking');
-            }, 100); // Toggle every 100ms for natural talking effect
-        });
-
-        // Stop talking when audio ends or pauses
-        beatAudio.addEventListener('ended', () => {
-            clearInterval(talkingInterval);
-            djImage.classList.remove('talking');
-        });
-
-        beatAudio.addEventListener('pause', () => {
-            clearInterval(talkingInterval);
-            djImage.classList.remove('talking');
-        });
-
         function playMustardTag() {
-            // Reset and play the audio (stop before "hoe")
-            beatAudio.currentTime = 0;
+            // Skip silence at beginning of audio file
+            beatAudio.currentTime = 0.8;
+            beatAudio.playbackRate = 1.0;
             beatAudio.play().catch(e => {
                 console.log('Audio play failed:', e);
             });
@@ -364,12 +358,25 @@
             setTimeout(() => {
                 beatAudio.pause();
                 beatAudio.currentTime = 0;
-            }, 1540);
+            }, 1600);
         }
 
         function handleClick(btn) {
             // Play the "Mustard on the beat" tag
             playMustardTag();
+
+            // Start talking animation directly (don't rely on audio events)
+            clearInterval(talkingInterval);
+            talkingInterval = setInterval(() => {
+                djImage.classList.toggle('talking');
+            }, 150);
+
+            // Stop talking after audio duration (slightly after audio stops)
+            setTimeout(() => {
+                clearInterval(talkingInterval);
+                talkingInterval = null;
+                djImage.classList.remove('talking');
+            }, 1650);
 
             // Visual feedback
             btn.classList.add('clicked');
