@@ -99,12 +99,12 @@
         /* Jaw overlay - uses cropped chin/mouth image for movement */
         .jaw-overlay {
             position: absolute;
-            top: 36%;
+            top: 39%;
             left: 50%;
             transform: translateX(-50%);
             width: 17%;
             z-index: 5;
-            transition: transform 0.1s ease;
+            transition: transform 0.05s ease;
         }
 
         .jaw-overlay img {
@@ -350,7 +350,7 @@
         beatAudio.addEventListener('play', () => {
             talkingInterval = setInterval(() => {
                 djImage.classList.toggle('talking');
-            }, 100); // Toggle every 100ms for natural talking effect
+            }, 150); // Toggle every 150ms for visible talking effect
         });
 
         // Stop talking when audio ends or pauses
