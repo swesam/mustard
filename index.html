@@ -347,9 +347,9 @@
         let talkingInterval = null;
 
         function playMustardTag() {
-            // Reset and play the audio (stop before "hoe")
-            beatAudio.currentTime = 0;
-            beatAudio.playbackRate = 1.15; // Speed up slightly
+            // Skip silence at beginning of audio file
+            beatAudio.currentTime = 0.8;
+            beatAudio.playbackRate = 1.0;
             beatAudio.play().catch(e => {
                 console.log('Audio play failed:', e);
             });
@@ -358,7 +358,7 @@
             setTimeout(() => {
                 beatAudio.pause();
                 beatAudio.currentTime = 0;
-            }, 1340); // Shorter due to faster playback
+            }, 1600);
         }
 
         function handleClick(btn) {
@@ -376,7 +376,7 @@
                 clearInterval(talkingInterval);
                 talkingInterval = null;
                 djImage.classList.remove('talking');
-            }, 1400);
+            }, 1650);
 
             // Visual feedback
             btn.classList.add('clicked');
