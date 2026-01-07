@@ -382,6 +382,18 @@
             // Play the "Mustard on the beat" tag
             playMustardTag();
 
+            // Start talking animation directly (don't rely on audio events)
+            clearInterval(talkingInterval);
+            talkingInterval = setInterval(() => {
+                djImage.classList.toggle('talking');
+            }, 150);
+
+            // Stop talking after audio duration
+            setTimeout(() => {
+                clearInterval(talkingInterval);
+                djImage.classList.remove('talking');
+            }, 1540);
+
             // Visual feedback
             btn.classList.add('clicked');
             soundWaves.classList.add('active');
