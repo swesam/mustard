@@ -367,6 +367,7 @@
         function playMustardTag() {
             // Reset and play the audio (stop before "hoe")
             beatAudio.currentTime = 0;
+            beatAudio.playbackRate = 1.15; // Speed up slightly
             beatAudio.play().catch(e => {
                 console.log('Audio play failed:', e);
             });
@@ -375,7 +376,7 @@
             setTimeout(() => {
                 beatAudio.pause();
                 beatAudio.currentTime = 0;
-            }, 1540);
+            }, 1340); // Shorter due to faster playback
         }
 
         function handleClick(btn) {
@@ -392,7 +393,7 @@
             setTimeout(() => {
                 clearInterval(talkingInterval);
                 djImage.classList.remove('talking');
-            }, 1540);
+            }, 1340);
 
             // Visual feedback
             btn.classList.add('clicked');
