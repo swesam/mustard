@@ -130,7 +130,7 @@
             100% { opacity: 0; height: 0%; width: 6%; }
         }
 
-        /* Jaw overlay - clips just the jaw/chin area for movement */
+        /* Jaw overlay - clips just the mouth/chin/beard area for movement */
         .jaw-overlay {
             position: absolute;
             top: 0;
@@ -140,13 +140,13 @@
             background-image: url('mustard-cutout.png');
             background-size: cover;
             background-position: center 20%;
-            clip-path: polygon(30% 52%, 70% 52%, 70% 75%, 30% 75%);
+            clip-path: polygon(35% 50%, 65% 50%, 65% 62%, 35% 62%);
             z-index: 5;
             transition: transform 0.1s ease;
         }
 
         .dj-image.talking .jaw-overlay {
-            transform: translateY(0.5%);
+            transform: translateY(1%);
         }
 
         .buttons-container {
