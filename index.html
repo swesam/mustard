@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mustard or Mother?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mustard-yellow: #FFDB58;
+            --mustard-dark: #E1A95F;
+            --background: #1a1a1a;
+            --text-light: #ffffff;
+            --text-muted: #888888;
+            --accent-glow: rgba(255, 219, 88, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* Animated background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image:
+                radial-gradient(circle at 25% 25%, var(--mustard-yellow) 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, var(--mustard-yellow) 2px, transparent 2px);
+            background-size: 60px 60px;
+            z-index: 0;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 1;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 10vw, 4rem);
+            color: var(--mustard-yellow);
+            margin-bottom: 0.25rem;
+            letter-spacing: 4px;
+            text-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .dj-image {
+            width: min(70vw, 70vh, 500px);
+            height: min(70vw, 70vh, 500px);
+            margin: 0 auto 1.5rem;
+            border-radius: 0;
+            overflow: hidden;
+            position: relative;
+            background: var(--background);
+        }
+
+        .dj-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .dj-image img.mouth-open {
+            opacity: 0;
+        }
+
+        .dj-image.talking img.mouth-closed {
+            opacity: 0;
+        }
+
+        .dj-image.talking img.mouth-open {
+            opacity: 1;
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .beat-btn {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            letter-spacing: 2px;
+            padding: 1rem 1.5rem;
+            border: 3px solid var(--mustard-yellow);
+            background: transparent;
+            color: var(--mustard-yellow);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .beat-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--mustard-yellow);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+            z-index: -1;
+        }
+
+        .beat-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--accent-glow), inset 0 0 30px rgba(255, 219, 88, 0.1);
+        }
+
+        .beat-btn:hover::before {
+            width: 300%;
+            height: 300%;
+        }
+
+        .beat-btn:hover {
+            color: var(--background);
+        }
+
+        .beat-btn:active {
+            transform: scale(0.95);
+        }
+
+        .beat-btn.clicked {
+            animation: pulse 0.4s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); box-shadow: 0 0 50px var(--mustard-yellow); }
+            100% { transform: scale(1); }
+        }
+
+        .beat-btn.shake {
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px) rotate(-2deg); }
+            40% { transform: translateX(10px) rotate(2deg); }
+            60% { transform: translateX(-10px) rotate(-2deg); }
+            80% { transform: translateX(10px) rotate(2deg); }
+        }
+
+        .hint {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .sound-waves {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            height: 30px;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sound-waves.active {
+            opacity: 1;
+        }
+
+        .wave-bar {
+            width: 6px;
+            background: var(--mustard-yellow);
+            border-radius: 3px;
+            animation: wave 0.5s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(1) { animation-delay: 0s; }
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.1s; }
+        .wave-bar:nth-child(5) { animation-delay: 0s; }
+
+        @keyframes wave {
+            0%, 100% { height: 10px; }
+            50% { height: 30px; }
+        }
+
+        footer {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--mustard-dark);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--mustard-yellow);
+        }
+
+        /* Easter egg styles */
+        .party-mode {
+            animation: rainbow 0.5s linear infinite;
+        }
+
+        @keyframes rainbow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--mustard-yellow);
+            pointer-events: none;
+            z-index: 100;
+            animation: fall 1s ease-out forwards;
+        }
+
+        @keyframes fall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* Mobile touch feedback */
+        @media (hover: none) {
+            .beat-btn:active {
+                background: var(--mustard-yellow);
+                color: var(--background);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <div class="container">
+        <h1>MUSTARD OR MOTHER?</h1>
+        <p class="subtitle">the ultimate audio illusion</p>
+
+        <div class="dj-image" id="dj-image">
+            <img src="mustard-cutout.png" alt="DJ Mustard" class="mouth-closed">
+            <img src="mustard-open-cutout.png" alt="DJ Mustard talking" class="mouth-open">
+        </div>
+
+        <div class="buttons-container">
+            <button class="beat-btn" id="mustard-btn">MUSTARD ON A BEAT</button>
+            <button class="beat-btn" id="mother-btn">MOTHER ON A BEACH</button>
+        </div>
+
+        <div class="sound-waves" id="sound-waves">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+        </div>
+
+        <p class="hint">say it fast 🔊</p>
+
+        <footer>
+            inspired by <a href="https://www.baconbeercan.com/" target="_blank" rel="noopener">baconbeercan.com</a>
+        </footer>
+    </div>
+
+    <!-- Audio element for the tag sound - add your own mustard.mp3 file -->
+    <audio id="beat-audio" preload="auto">
+        <source src="mustard.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const mustardBtn = document.getElementById('mustard-btn');
+        const motherBtn = document.getElementById('mother-btn');
+        const soundWaves = document.getElementById('sound-waves');
+        const beatAudio = document.getElementById('beat-audio');
+        const djImage = document.getElementById('dj-image');
+
+        let clickCount = 0;
+        let lastClickTime = 0;
+        let rapidClicks = 0;
+
+        let talkingInterval = null;
+
+        // Start talking animation when audio plays - rapidly toggle mouth open/closed
+        beatAudio.addEventListener('play', () => {
+            talkingInterval = setInterval(() => {
+                djImage.classList.toggle('talking');
+            }, 100); // Toggle every 100ms for natural talking effect
+        });
+
+        // Stop talking when audio ends or pauses
+        beatAudio.addEventListener('ended', () => {
+            clearInterval(talkingInterval);
+            djImage.classList.remove('talking');
+        });
+
+        beatAudio.addEventListener('pause', () => {
+            clearInterval(talkingInterval);
+            djImage.classList.remove('talking');
+        });
+
+        function playMustardTag() {
+            // Reset and play the audio (stop before "hoe")
+            beatAudio.currentTime = 0;
+            beatAudio.play().catch(e => {
+                console.log('Audio play failed:', e);
+            });
+
+            // Stop playback after "mustard on the beat" (adjust timing as needed)
+            setTimeout(() => {
+                beatAudio.pause();
+                beatAudio.currentTime = 0;
+            }, 1540);
+        }
+
+        function handleClick(btn) {
+            // Play the "Mustard on the beat" tag
+            playMustardTag();
+
+            // Visual feedback
+            btn.classList.add('clicked');
+            soundWaves.classList.add('active');
+
+            setTimeout(() => {
+                btn.classList.remove('clicked');
+            }, 400);
+
+            setTimeout(() => {
+                soundWaves.classList.remove('active');
+            }, 800);
+
+            // Easter egg: rapid clicking detection
+            const now = Date.now();
+            if (now - lastClickTime < 300) {
+                rapidClicks++;
+                if (rapidClicks >= 10) {
+                    triggerPartyMode();
+                    rapidClicks = 0;
+                }
+            } else {
+                rapidClicks = 1;
+            }
+            lastClickTime = now;
+        }
+
+        function triggerPartyMode() {
+            document.body.classList.add('party-mode');
+
+            // Create confetti
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => createConfetti(), i * 30);
+            }
+
+            // Shake both buttons
+            mustardBtn.classList.add('shake');
+            motherBtn.classList.add('shake');
+
+            setTimeout(() => {
+                document.body.classList.remove('party-mode');
+                mustardBtn.classList.remove('shake');
+                motherBtn.classList.remove('shake');
+            }, 2000);
+        }
+
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.top = '-10px';
+            confetti.style.background = `hsl(${Math.random() * 60 + 40}, 100%, 60%)`;
+            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            confetti.style.width = (Math.random() * 10 + 5) + 'px';
+            confetti.style.height = (Math.random() * 10 + 5) + 'px';
+            document.body.appendChild(confetti);
+
+            setTimeout(() => confetti.remove(), 1000);
+        }
+
+        mustardBtn.addEventListener('click', () => handleClick(mustardBtn));
+        motherBtn.addEventListener('click', () => handleClick(motherBtn));
+
+        // Keyboard accessibility
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '1') handleClick(mustardBtn);
+            if (e.key === '2') handleClick(motherBtn);
+        });
+    </script>
+</body>
+</html>
