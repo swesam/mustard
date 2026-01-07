@@ -130,13 +130,13 @@
             100% { opacity: 0; height: 0%; width: 6%; }
         }
 
-        /* Jaw overlay - uses cropped cheek/mouth image for movement */
+        /* Jaw overlay - uses cropped chin/mouth image for movement */
         .jaw-overlay {
             position: absolute;
-            top: 50%;
+            top: 43%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 30%;
+            transform: translateX(-50%);
+            width: 17%;
             z-index: 5;
             transition: transform 0.1s ease;
         }
@@ -148,7 +148,7 @@
         }
 
         .dj-image.talking .jaw-overlay {
-            transform: translate(-50%, -50%) translateY(2%);
+            transform: translateX(-50%) translateY(3%);
         }
 
         .buttons-container {
