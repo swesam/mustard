@@ -346,24 +346,6 @@
 
         let talkingInterval = null;
 
-        // Start talking animation when audio plays - rapidly toggle mouth open/closed
-        beatAudio.addEventListener('play', () => {
-            talkingInterval = setInterval(() => {
-                djImage.classList.toggle('talking');
-            }, 150); // Toggle every 150ms for visible talking effect
-        });
-
-        // Stop talking when audio ends or pauses
-        beatAudio.addEventListener('ended', () => {
-            clearInterval(talkingInterval);
-            djImage.classList.remove('talking');
-        });
-
-        beatAudio.addEventListener('pause', () => {
-            clearInterval(talkingInterval);
-            djImage.classList.remove('talking');
-        });
-
         function playMustardTag() {
             // Reset and play the audio (stop before "hoe")
             beatAudio.currentTime = 0;
@@ -389,11 +371,12 @@
                 djImage.classList.toggle('talking');
             }, 150);
 
-            // Stop talking after audio duration
+            // Stop talking after audio duration (slightly after audio stops)
             setTimeout(() => {
                 clearInterval(talkingInterval);
+                talkingInterval = null;
                 djImage.classList.remove('talking');
-            }, 1340);
+            }, 1400);
 
             // Visual feedback
             btn.classList.add('clicked');
